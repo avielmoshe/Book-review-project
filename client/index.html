@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <h1>Book Review Platform</h1>
+        <ul class="nav-links hidden">
+          <li id="Books">Books</li>
+          <li id="addBook">Add new book</li>
+          <li>about</li>
+          <li id="logout">Logout</li>
+        </ul>
+    </nav>
+    <main>
+<div id="message"></div>
+      <div class="conenct signUp hidden">
+        <form id="signUp">
+          <label for="username">username</label>
+          <input
+            id="username"
+            placeholder="username"
+            required
+            type="text"
+          />
+          <label for="email">Email</label>
+          <input id="email" placeholder="Email" required type="email" />
+
+          <label for="Password">Password</label>
+          <input id="Password" placeholder="Password" required type="password" />
+          <button type="submit">signUp</button>
+        </form>
+        <button id="alreadySignUp" class="secondary">Already signUp?</button>
+      </div>
+      <div class="conenct login">
+        <form id="login">
+          <label for="email-login">Email</label>
+          <input id="email-login" placeholder="Email" required type="email" />
+
+          <label for="Password-login">Password</label>
+          <input id="Password-login" placeholder="Password" required type="password" />
+
+          <button type="submit">login</button>
+        </form>
+        <button id="goToSignUpPage" class="secondary">
+          Don't have an account?
+        </button>
+      </div>
+      <div id="continer"></div>
+    </main>
+    <script type="module" src="./JS/main.js" ></script>
+  </body>
+</html>

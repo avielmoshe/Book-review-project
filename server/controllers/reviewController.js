@@ -3,6 +3,7 @@ import Book from "../models/bookModel.js";
 
 export const crateNewReview = async (req, res) => {
   const userId = req.user._id;
+
   const { bookId } = req.params;
   const { reviewText, rating } = req.body;
   if (!reviewText || !rating) {
@@ -26,6 +27,7 @@ export const crateNewReview = async (req, res) => {
     }
 
     const newReview = new Review({
+      username: req.user.username,
       reviewText,
       rating,
       createdBy: userId,

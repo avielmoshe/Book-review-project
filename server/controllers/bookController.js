@@ -1,7 +1,7 @@
 import Book from "../models/bookModel.js";
 
 export const crateNewBook = async (req, res) => {
-  const { title, author, genre, publishedYear } = req.body;
+  const { title, author, genre, publishedYear, description } = req.body;
 
   if (!title || !author || !genre || !publishedYear) {
     return res.status(400).json({
@@ -14,6 +14,7 @@ export const crateNewBook = async (req, res) => {
       title,
       author,
       genre,
+      description,
       publishedYear,
       createdBy: req.user._id,
     });
