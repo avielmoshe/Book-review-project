@@ -3,6 +3,31 @@ import { hashPassword, comparePassword } from "../utils/auth.js";
 import JWT from "jsonwebtoken";
 const JWT_EXPIRATION = { expiresIn: "1h" };
 
+export const TokenValid = (req, res) => {
+  try {
+    res.status(200).send({
+      userValid: true,
+      username: req.user.username,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Something went wrong. Please try again later." });
+  }
+};
+
+export const getUserId = (req, res) => {
+  try {
+    res.status(200).send({
+      userId: req.user._id,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "Something went wrong. Please try again later." });
+  }
+};
+
 export const createNewUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;

@@ -1,7 +1,16 @@
-import { createNewUser, signInUser } from "./registerService.js";
+import { createNewUser, signInUser, isTokenValid } from "./registerService.js";
 import { toggleHidden } from "./utils.js";
-import { renderBooks, renderAddBook } from "./renderService.js";
+import {
+  renderWelcome,
+  renderAddBook,
+  getAllBooks,
+  getMyBooks,
+  renderBooks,
+} from "./renderService.js";
+import { getCookie, deleteCookie, favoritesList } from "./utils.js";
 
+const token = getCookie("token");
+const welcomeContainerEl = document.querySelector(".welcome-container");
 const signUpPageEl = document.querySelector(".signUp");
 const loginPageEl = document.querySelector(".login");
 const signUpForm = document.getElementById("signUp");
@@ -14,6 +23,29 @@ const navLinksEl = document.querySelector(".nav-links");
 const continerElement = document.getElementById("continer");
 const BooksElement = document.getElementById("Books");
 const addBookElement = document.getElementById("addBook");
+const aboutElement = document.getElementById("about");
+const myBooksElement = document.getElementById("myBooks");
+const containerAboutElement = document.querySelector(".container-about");
+const favEl = document.getElementById("favorite");
+
+let clickOnAbout = false;
+export let clickOnFav = false;
+
+async function isAlreadyLogin() {
+  let isUserValid = false;
+  try {
+    isUserValid = await isTokenValid(token);
+    if (isUserValid.userValid) {
+      toggleHidden(loginPageEl);
+      toggleHidden(navLinksEl);
+      getAllBooks();
+      renderWelcome();
+    }
+  } catch (error) {
+    console.log("user token is not auth");
+  }
+}
+isAlreadyLogin();
 
 signUpForm.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -49,18 +81,53 @@ alreadySignUpEl.addEventListener("click", () => {
 });
 
 BooksElement.addEventListener("click", () => {
-  renderBooks();
+  clickOnFav = false;
+  if (clickOnAbout) {
+    toggleHidden(containerAboutElement);
+    clickOnAbout = false;
+  }
+  getAllBooks();
+});
+
+myBooksElement.addEventListener("click", () => {
+  clickOnFav = false;
+  getMyBooks();
 });
 
 addBookElement.addEventListener("click", () => {
+  clickOnFav = false;
+  welcomeContainerEl.textContent = "";
+  if (clickOnAbout) {
+    toggleHidden(containerAboutElement);
+    clickOnAbout = false;
+  }
   renderAddBook();
 });
 
+aboutElement.addEventListener("click", () => {
+  clickOnFav = false;
+  clickOnAbout = true;
+  welcomeContainerEl.textContent = "";
+  continerElement.textContent = "";
+  toggleHidden(containerAboutElement);
+});
+
+favEl.addEventListener("click", () => {
+  clickOnFav = true;
+  renderBooks(favoritesList);
+});
+
 logoutEl.addEventListener("click", () => {
-  document.cookie =
-    "token" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  deleteCookie();
+  location.reload();
   alert("You have been logged out.");
+  clickOnFav = false;
+  if (clickOnAbout) {
+    toggleHidden(containerAboutElement);
+    clickOnAbout = false;
+  }
   toggleHidden(navLinksEl);
   toggleHidden(loginPageEl);
   continerElement.textContent = "";
+  welcomeContainerEl.textContent = "";
 });

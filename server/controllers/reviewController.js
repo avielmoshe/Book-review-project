@@ -34,6 +34,8 @@ export const crateNewReview = async (req, res) => {
       book: bookId,
     });
 
+    console.log(newReview);
+
     await newReview.save();
 
     await Book.findByIdAndUpdate(bookId, { $push: { reviews: newReview._id } });

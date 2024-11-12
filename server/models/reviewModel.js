@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
   username: {
     type: String,
-    unique: true,
   },
   reviewText: {
     type: String,

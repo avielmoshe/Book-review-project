@@ -1,5 +1,9 @@
 const MessageElement = document.getElementById("message");
 import { renderBooks } from "./renderService.js";
+import { bookById } from "./crudService.js";
+import { clickOnFav } from "./main.js";
+
+export const favoritesList = [];
 
 export const toggleHidden = (element) => {
   element.classList.toggle("hidden");
@@ -29,8 +33,7 @@ export function displayError(message) {
   MessageElement.style.color = "red";
   setTimeout(() => {
     MessageElement.innerText = "";
-    renderBooks();
-  }, 2000);
+  }, 3000);
 }
 
 export function displaySuccess(message) {
@@ -38,6 +41,28 @@ export function displaySuccess(message) {
   MessageElement.style.color = "green";
   setTimeout(() => {
     MessageElement.innerText = "";
-    renderBooks();
   }, 2000);
+}
+
+export function deleteCookie() {
+  document.cookie =
+    "token" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+export async function addAndRemoveFavorites(bookId, favBtn) {
+  const isBookEx = favoritesList.findIndex((cuurnetBook) => {
+    return cuurnetBook._id === bookId;
+  });
+  if (isBookEx === -1) {
+    favoritesList.push(await bookById(bookId));
+    favBtn.classList.add("favBtn-click");
+    favBtn.textContent = `Remove from Favorites`;
+  } else {
+    favoritesList.splice(isBookEx, 1);
+    favBtn.classList.remove("favBtn-click");
+    favBtn.textContent = `Add to Favorites`;
+    if (clickOnFav) {
+      renderBooks(favoritesList);
+    }
+  }
 }

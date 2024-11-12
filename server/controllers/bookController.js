@@ -32,10 +32,11 @@ export const crateNewBook = async (req, res) => {
 
 export const getBooks = async (req, res) => {
   try {
-    const { genre, author } = req.query;
+    const { genre, author, createdBy } = req.query;
     const filter = {};
     if (genre) filter.genre = genre;
     if (author) filter.author = author;
+    if (createdBy) filter.createdBy = createdBy;
 
     const books = await Book.find(filter).select("-reviews");
 

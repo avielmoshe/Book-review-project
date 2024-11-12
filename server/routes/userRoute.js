@@ -4,10 +4,16 @@ import {
   updateUser,
   deleteUser,
   singInUser,
+  TokenValid,
+  getUserId,
 } from "../controllers/userController.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
+
+router.get("/validateToken", verifyToken, TokenValid);
+
+router.get("/", verifyToken, getUserId);
 
 router.post("/signup", createNewUser);
 

@@ -4,12 +4,33 @@ import {
   displayError,
   displaySuccess,
 } from "./utils.js";
+import { renderWelcome, getAllBooks } from "./renderService.js";
 
 const baseUrl = "http://localhost:3000";
 const MessageElement = document.getElementById("message");
 const signUpPageEl = document.querySelector(".signUp");
 const loginPageEl = document.querySelector(".login");
 const navLinksEl = document.querySelector(".nav-links");
+
+export const isTokenValid = async (jwtToken) => {
+  try {
+    const response = await fetch(`${baseUrl}/api/user/validateToken`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error:", error);
+    return false;
+  }
+};
 
 export const createNewUser = async (user) => {
   try {
@@ -59,6 +80,11 @@ export const signInUser = async (userCredentials) => {
     console.log("Sign-in Success:", responseData);
     displaySuccess("Sign-in successful! pls wait");
     setCookie(responseData.token);
+    setTimeout(() => {
+      getAllBooks();
+      renderWelcome();
+    }, 2000);
+    location.reload();
     toggleHidden(loginPageEl);
     toggleHidden(navLinksEl);
   } catch (error) {
